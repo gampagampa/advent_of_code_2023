@@ -4,13 +4,16 @@ def get_times(files):
     row = files[0].split(' ')
     # keep only values of row that are digits
     times = [x for x in row if x.isdigit()]
+    # create one big string of all elements in times
+    times = ''.join(times)
 
     row1 = files[1].split(' ')
     # keep only values of row that are digits
     distances = [x for x in row1 if x.isdigit()]
+    # create one big string of all elements in times
+    distances = ''.join(distances)
 
-    combined = zip(times, distances)
-    return combined
+    return (times, distances)
 
 
 def compute_wins(time, distance):
@@ -24,18 +27,15 @@ def compute_wins(time, distance):
 
 
 def open_door_6():
-    files = read_txt_file('door_6_1')
+    files = read_txt_file('door_6_1_test')
 
     t_d = get_times(files)
+    time = t_d[0]
+    distance = t_d[1]
 
-    total_wins = 1
-    for time, distance in t_d:
-        wins = compute_wins(int(time), int(distance))
-        total_wins *= wins
-
+    wins = compute_wins(int(time), int(distance))
     # compute product of all elements in total wins
-    print('product of wins: ', total_wins)
-
+    print('product of wins: ', wins)
 
 
 if __name__ == '__main__':
