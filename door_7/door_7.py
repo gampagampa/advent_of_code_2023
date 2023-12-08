@@ -2,7 +2,8 @@ from main import read_txt_file
 
 order = 'A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, 2'
 
-map_ = {'A': '13', 'K': '12', 'Q': '11', 'J': '10', 'T': '09', '9': '08', '8': '07', '7': '06', '6': '05', '5': '04', '4': '03', '3': '02', '2': '01'}
+#map_ = {'A': '13', 'K': '12', 'Q': '11', 'J': '10', 'T': '09', '9': '08', '8': '07', '7': '06', '6': '05', '5': '04', '4': '03', '3': '02', '2': '01'}
+map_ = {'A': '13', 'K': '12', 'Q': '11', 'J': '00', 'T': '09', '9': '08', '8': '07', '7': '06', '6': '05', '5': '04', '4': '03', '3': '02', '2': '01'}
 
 def get_prefix(one_count, two_count, three_count, four_count, five_count):
     if five_count == 1:
@@ -21,7 +22,6 @@ def get_prefix(one_count, two_count, three_count, four_count, five_count):
         return '10'
 
 
-
 def get_postfix(cards):
     postfix_string = ''
     for card in cards:
@@ -31,7 +31,11 @@ def get_postfix(cards):
 
 def get_strength(cards):
     count_dict = {}
-    for card in cards:
+    temp_card = cards.replace('J','')
+    # count J in temp_card
+    j_count = len(cards) - len(temp_card)
+
+    for card in temp_card:
         if card in count_dict:
             count_dict[card] += 1
         else:
@@ -44,6 +48,38 @@ def get_strength(cards):
     three_count = list(duplicates.values()).count(3)
     four_count = list(duplicates.values()).count(4)
     five_count = list(duplicates.values()).count(5)
+
+    if j_count == 5:
+        five_count = 1
+
+    if j_count > 0:
+        if four_count > 0:
+            four_count = 0
+            five_count = 1
+        elif three_count > 0:
+            three_count = 0
+            if j_count == 1:
+                four_count = 1
+            else:
+                five_count = 1
+        elif two_count > 0:
+            two_count -= 1
+            if j_count == 1:
+                three_count = 1
+            elif j_count == 2:
+                four_count = 1
+            else:
+                five_count = 1
+        elif one_count > 0:
+            if j_count == 1:
+                two_count = 1
+            elif j_count == 2:
+                three_count = 1
+            elif j_count == 3:
+                four_count = 1
+            else:
+                five_count = 1
+
 
     prefix = get_prefix(one_count, two_count, three_count, four_count, five_count)
     postfix = get_postfix(cards)
